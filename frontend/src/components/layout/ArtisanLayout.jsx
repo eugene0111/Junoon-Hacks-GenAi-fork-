@@ -22,7 +22,7 @@ const ArtisanLayout = () => {
       </div>
 
       {}
-      <Footer />
+      
       <Mic />
     </div>
   );
