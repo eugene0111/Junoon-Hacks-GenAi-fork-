@@ -24,7 +24,7 @@ const Header = ({ onLoginClick }) => {
             className="h-10 w-10 object-contain"
           />
           <h1 className="text-3xl font-bold text-gray-800 tracking-tighter">
-            Kala<span className="text-google-blue">Ghar</span>
+            कला<span className="text-google-blue">Ghar</span>
           </h1>
         </Link>
 
