@@ -248,7 +248,7 @@ const MyOrdersPage = () => {
                             </p>
                           </td>
                           <td className="px-4 py-3 font-medium text-gray-800 text-right whitespace-nowrap align-top">
-                            ${order.pricing?.total?.toFixed(2) || "0.00"}
+                            ₹{order.pricing?.total?.toFixed(2) || "0.00"}
                           </td>
                           <td className="px-4 py-3 text-center align-top w-48">
                             <Link
@@ -316,7 +316,7 @@ const MyOrdersPage = () => {
                             )}
                           </td>
                           <td className="px-4 py-3 font-medium text-gray-800 text-right whitespace-nowrap align-top">
-                            ${order.pricing?.total?.toFixed(2) || "0.00"}
+                            ₹{order.pricing?.total?.toFixed(2) || "0.00"}
                           </td>
                           <td className="px-4 py-3 text-center align-top w-48">
                             <Link
@@ -376,7 +376,7 @@ const MyOrdersPage = () => {
                         {formatDate(order.createdAt)}
                       </p>
                       <p className="text-sm font-medium text-gray-700">
-                        ${order.pricing?.total?.toFixed(2) || "0.00"}
+                        ₹{order.pricing?.total?.toFixed(2) || "0.00"}
                       </p>
                     </div>
                   </div>
