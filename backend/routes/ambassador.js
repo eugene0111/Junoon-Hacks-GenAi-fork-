@@ -14,16 +14,68 @@ router.get(
   authorize("ambassador"),
   async (req, res) => {
     try {
-      const data = await AmbassadorService.getDashboardSummary(req.user.id);
+      let data = await AmbassadorService.getDashboardSummary(req.user.id);
+      data = {
+        stats: [
+          {
+            name: "Artisans Mentored",
+            value: 1,
+            icon: "Users",
+          },
+          {
+            name: "Pending Approvals",
+            value: 0,
+            icon: "Clock",
+          },
+          {
+            name: "Total Artisan Earnings",
+            value: "₹1500",
+            icon: "DollarSign",
+          },
+          {
+            name: "Your Rating",
+            value: "4",
+            icon: "Star",
+          },
+        ],
+        artisansData: {
+          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+          datasets: [
+            {
+              label: "Artisans Onboarded",
+              data: [0, 0, 0, 0, 0, 0],
+              backgroundColor: "rgba(139, 92, 246, 0.5)",
+              borderColor: "rgba(139, 92, 246, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        recentActivities: [
+          {
+            id: 1,
+            description: "You are mentoring 1 artisan.",
+            time: "1 day ago",
+          },
+          {
+            id: 2,
+            description: "You have 0 pending mentorship requests.",
+            time: "Just now",
+          },
+          {
+            id: 3,
+            description: "Welcome to your dashboard!",
+            time: "2 days ago",
+          },
+        ],
+        topArtisans: [],
+      };
       res.json(data);
     } catch (error) {
       console.error(error);
-      res
-        .status(500)
-        .json({
-          message: "Error fetching dashboard summary",
-          error: error.message,
-        });
+      res.status(500).json({
+        message: "Error fetching dashboard summary",
+        error: error.message,
+      });
     }
   }
 );
