@@ -53,12 +53,10 @@ router.post(
         !buyer?.profile?.location?.latitude ||
         !buyer?.profile?.location?.longitude
       ) {
-        return res
-          .status(400)
-          .json({
-            message:
-              "Your location is not set. Please update your profile before ordering.",
-          });
+        return res.status(400).json({
+          message:
+            "Your location is not set. Please update your profile before ordering.",
+        });
       }
       let subtotal = 0;
       const orderItems = [];

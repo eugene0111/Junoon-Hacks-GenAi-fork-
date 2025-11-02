@@ -68,7 +68,6 @@ router.get("/artisans/nearest", auth, async (req, res) => {
     const artisansWithDistance = allArtisans
       .filter(
         (artisan) =>
-          // Filter out the current user and artisans without location
           artisan.id !== currentUser.id &&
           artisan.profile?.location?.latitude &&
           artisan.profile?.location?.longitude

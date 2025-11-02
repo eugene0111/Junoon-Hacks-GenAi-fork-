@@ -24,8 +24,8 @@ const credentials = JSON.parse(process.env.GOOGLE_CREDS);
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const translationClient = new TranslationServiceClient({ credentials });
 
-const projectId = credentials.project_id; // Get project ID for translate API
-const location = 'global';// The location for the Translate API
+const projectId = credentials.project_id;
+const location = 'global';
 
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -319,7 +319,6 @@ router.post(
         throw new Error("The AI returned an invalid format. Please try again.");
       }
 
-      // const suggestion = JSON.parse(jsonString);
       res.json(jsonString);
     } catch (error) {
       console.error("AI price suggestion error:", error);
@@ -404,7 +403,6 @@ router.post(
         );
       }
 
-      // const report = JSON.parse(jsonString);
       await AIReportService.saveReport("funding", jsonString, userId);
       res.json(jsonString);
     } catch (error) {
@@ -517,7 +515,6 @@ router.post(
         throw new Error("The AI returned an invalid format.");
       }
 
-      // const insights = JSON.parse(jsonString);
       await AIReportService.saveReport("insights", jsonString, userId);
       res.json(jsonString);
     } catch (error) {
@@ -632,7 +629,6 @@ router.post("/assistant", [auth, authorize("artisan")], async (req, res) => {
     const response = result.response;
     const functionCalls = response.functionCalls();
 
-    // --- STEP 3: EXECUTE THE CALLED TOOL ---
     if (functionCalls && functionCalls.length > 0) {
       const call = functionCalls[0];
       let toolResult;
@@ -692,7 +688,7 @@ router.post("/assistant", [auth, authorize("artisan")], async (req, res) => {
         }
         toolResult = counts;
       } else if (call.name === "getNearbyArtisanEvents") {
-        toolResult = await GoogleEventsService.getNearbyEvents(userId, false); // false = use cache if fresh
+        toolResult = await GoogleEventsService.getNearbyEvents(userId, false);
       } else if (call.name === "getArtisanReviews") {
         const { limit = 3 } = call.args;
         const reviewsSnapshot = await db
@@ -802,15 +798,14 @@ router.post("/translate", auth, async (req, res) => {
   try {
     const request = {
       parent: `projects/${projectId}/locations/${location}`,
-      contents: Array.isArray(text) ? text : [text], // Ensure contents is an array
+      contents: Array.isArray(text) ? text : [text],
       mimeType: 'text/plain',
-      sourceLanguageCode: 'en-IN', // Assuming your base content is English
+      sourceLanguageCode: 'en-IN',
       targetLanguageCode: targetLanguage,
     };
 
     const [response] = await translationClient.translateText(request);
     
-    // Handle both single and multiple text translations
     const translatedTexts = response.translations.map(t => t.translatedText);
     
     res.json({ translatedText: translatedTexts.length > 1 ? translatedTexts : translatedTexts[0] });

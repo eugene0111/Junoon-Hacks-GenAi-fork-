@@ -99,7 +99,7 @@ router.get(
             console.error(`Error fetching artisan ${id}:`, err);
             return null;
           })
-        ); // Add catch
+        );
         const artisans = await Promise.all(artisanPromises);
         artisansMap = artisans.reduce((map, art) => {
           if (art)
@@ -165,7 +165,7 @@ router.get("/:id", async (req, res) => {
           );
           return null;
         }
-      ); // Add catch
+      );
       if (artisan) {
         artisanDetails = {
           id: artisan.id,
@@ -190,7 +190,7 @@ router.get("/:id", async (req, res) => {
           );
           return null;
         })
-      ); // Add catch
+      );
       const users = await Promise.all(userPromises);
       usersMap = users.reduce((map, user) => {
         if (user)
@@ -261,11 +261,9 @@ router.post(
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
     if (!req.file)
-      return res
-        .status(400)
-        .json({
-          errors: [{ path: "productImage", msg: "Product image is required." }],
-        });
+      return res.status(400).json({
+        errors: [{ path: "productImage", msg: "Product image is required." }],
+      });
 
     try {
       const productData = {
@@ -276,9 +274,7 @@ router.post(
       if (productData.inventory && typeof productData.inventory === "string") {
         try {
           productData.inventory = JSON.parse(productData.inventory);
-        } catch (e) {
-          /* ignore */
-        }
+        } catch (e) {}
       }
       productData.inventory = {
         quantity: parseInt(productData.inventory?.quantity || 0, 10),
@@ -298,7 +294,7 @@ router.post(
             );
             return null;
           }
-        ); // Add catch
+        );
         if (artisan)
           populatedProduct.artisan = {
             id: artisan.id,
@@ -306,12 +302,10 @@ router.post(
             profile: artisan.profile,
           };
       }
-      res
-        .status(201)
-        .json({
-          message: "Product created successfully",
-          product: populatedProduct,
-        });
+      res.status(201).json({
+        message: "Product created successfully",
+        product: populatedProduct,
+      });
     } catch (error) {
       console.error("Create product with image error:", error);
       res.status(500).json({ message: "Server error while creating product" });
@@ -377,9 +371,7 @@ router.put(
         if (typeof updateData.inventory === "string") {
           try {
             updateData.inventory = JSON.parse(updateData.inventory);
-          } catch (e) {
-            /* ignore */
-          }
+          } catch (e) {}
         }
         const currentInventory = product.inventory || {};
         updateData.inventory = {
@@ -406,7 +398,7 @@ router.put(
             err
           );
           return null;
-        }); // Add catch
+        });
         if (artisan)
           populatedProduct.artisan = {
             id: artisan.id,
@@ -509,11 +501,9 @@ router.post(
         error.message ===
         "Cannot add review, product owner information is missing."
       ) {
-        return res
-          .status(500)
-          .json({
-            message: "Could not add review due to missing product owner info.",
-          });
+        return res.status(500).json({
+          message: "Could not add review due to missing product owner info.",
+        });
       }
       res
         .status(500)

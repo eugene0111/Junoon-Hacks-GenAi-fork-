@@ -329,7 +329,7 @@ const ProductFormFields = ({
             {priceSuggestion && (
               <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
                 <p className="font-bold text-yellow-800">
-                  AI Suggestion: ${priceSuggestion.suggestedPriceRange}
+                  AI Suggestion: ₹{priceSuggestion.suggestedPriceRange}
                 </p>
                 <p className="text-xs text-yellow-700 mt-1">
                   {priceSuggestion.justification}

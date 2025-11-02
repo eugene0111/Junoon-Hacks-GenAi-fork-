@@ -15,13 +15,14 @@ import {
 } from "../../components/common/Icons";
 import SkeletonCard from "../../components/ui/SkeletonCard";
 import SkeletonStat from "../../components/ui/SkeletonStat";
-import { Line } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -33,6 +34,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -82,6 +84,55 @@ const MiniLineChart = ({ title, data, labels, icon, borderColor, bgColor }) => {
   );
 };
 
+const MiniBarChart = ({ title, data, labels, icon, borderColor, bgColor }) => {
+  const chartData = {
+    labels: labels,
+    datasets: [
+      {
+        label: title,
+        data: data,
+        backgroundColor: bgColor || "rgba(66, 133, 244, 0.5)",
+        borderColor: borderColor || "#4285F4",
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+    ],
+  };
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { mode: "index", intersect: false, displayColors: false },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { display: false },
+      },
+      y: {
+        display: false,
+        beginAtZero: true,
+      },
+    },
+  };
+  return (
+    <div className="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-100 h-full flex flex-col">
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-medium text-gray-500">{title}</h3>
+        {icon && (
+          <span className="text-gray-400">
+            {React.cloneElement(icon, { className: "h-5 w-5" })}
+          </span>
+        )}
+      </div>
+      <div className="flex-grow h-24 md:h-32">
+        <Bar options={options} data={chartData} />
+      </div>
+    </div>
+  );
+};
+
 const MentorshipWidget = () => {
   const [mentor, setMentor] = useState(null);
   const [requests, setRequests] = useState([]);
@@ -119,11 +170,8 @@ const MentorshipWidget = () => {
     }
   };
 
-
   if (loading) {
-    return (
-      <div className="h-20 bg-gray-200 rounded-lg animate-pulse mb-6"></div>
-    );
+    return <div className="h-20 bg-gray-200 rounded-lg animate-pulse mb-6"></div>;
   }
 
   if (mentor) {
@@ -177,8 +225,8 @@ const MentorshipWidget = () => {
 const ArtisanDashboard = () => {
   const { user } = useAuth();
   const [stats, setStats] = useState({ orders: 0, lowInventory: 0 });
-  const [salesData, setSalesData] = useState(null);
-  const [viewsData, setViewsData] = useState(null);
+  const [salesData, setSalesData] = useState({ labels: [], data: [] });
+  const [viewsData, setViewsData] = useState({ labels: [], data: [] });
   const [topProducts, setTopProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -188,10 +236,9 @@ const ArtisanDashboard = () => {
       setLoading(true);
       try {
         const response = await api.get("/dashboard/artisan-stats");
-
         setStats(response.data.stats);
-        setSalesData(response.data.salesData);
-        setViewsData(response.data.viewsData);
+        setSalesData(response.data.salesData || { labels: [], data: [] });
+        setViewsData(response.data.viewsData || { labels: [], data: [] });
         setTopProducts(response.data.topProducts);
       } catch (err) {
         setError("Failed to fetch dashboard data");
@@ -200,7 +247,6 @@ const ArtisanDashboard = () => {
         setLoading(false);
       }
     };
-
     fetchDashboardData();
   }, []);
 
@@ -320,26 +366,22 @@ const ArtisanDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <AnimatedSection className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-8">
-          {salesData && (
-            <MiniLineChart
-              title="Sales (Last 7 Days)"
-              labels={salesData.labels}
-              data={salesData.data}
-              icon={<CurrencyDollarIcon />}
-              borderColor="#34A853"
-              bgColor="rgba(52, 168, 83, 0.1)"
-            />
-          )}
-          {viewsData && (
-            <MiniLineChart
-              title="Views by Top Product"
-              labels={viewsData.labels}
-              data={viewsData.data}
-              icon={<EyeIcon />}
-              borderColor="#4285F4"
-              bgColor="rgba(66, 133, 244, 0.1)"
-            />
-          )}
+          <MiniLineChart
+            title="Sales (Last 7 Days)"
+            labels={salesData.labels}
+            data={salesData.data}
+            icon={<CurrencyDollarIcon />}
+            borderColor="#34A853"
+            bgColor="rgba(52, 168, 83, 0.1)"
+          />
+          <MiniBarChart
+            title="Views by Top Product"
+            labels={viewsData.labels}
+            data={viewsData.data}
+            icon={<EyeIcon />}
+            borderColor="#4285F4"
+            bgColor="rgba(66, 133, 244, 0.5)"
+          />
         </AnimatedSection>
 
         <AnimatedSection className="lg:col-span-1">
