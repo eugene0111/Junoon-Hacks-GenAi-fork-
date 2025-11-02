@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axiosConfig";
 
-import { NavLink } from "react-router-dom"; 
-
-
+import { NavLink } from "react-router-dom";
 
 const AnimatedSection = ({ children, className = "" }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -296,9 +294,6 @@ const PlanEventModal = ({ onClose }) => (
   </div>
 );
 
-
-// --- START OF CHANGES ---
-
 const AmbassadorHeader = ({ user, logout }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -346,7 +341,9 @@ const AmbassadorHeader = ({ user, logout }) => {
               key={link.name}
               to={link.href}
               className={({ isActive }) =>
-                `transition-colors ${isActive ? "text-google-blue" : "hover:text-google-blue"}`
+                `transition-colors ${
+                  isActive ? "text-google-blue" : "hover:text-google-blue"
+                }`
               }
             >
               {link.name}
@@ -417,7 +414,11 @@ const AmbassadorHeader = ({ user, logout }) => {
                   to={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={({ isActive }) =>
-                    `px-3 py-2 rounded-md font-medium ${isActive ? "bg-gray-100 text-google-blue" : "text-gray-700 hover:bg-gray-100"}`
+                    `px-3 py-2 rounded-md font-medium ${
+                      isActive
+                        ? "bg-gray-100 text-google-blue"
+                        : "text-gray-700 hover:bg-gray-100"
+                    }`
                   }
                 >
                   {link.name}
@@ -431,117 +432,116 @@ const AmbassadorHeader = ({ user, logout }) => {
   );
 };
 
-// --- END OF CHANGES ---
-
-
 const Footer = () => (
-    <footer className="bg-google-blue text-white">
-        <div className="container mx-auto px-6 py-12">
-            <div className="border-t border-white/30 mt-8 pt-8 text-center text-white/70 text-sm">
-                &copy; {new Date().getFullYear()} KalaGhar. All Rights Reserved.
-            </div>
-        </div>
-    </footer>
+  <footer className="bg-google-blue text-white">
+    <div className="container mx-auto px-6 py-12">
+      <div className="border-t border-white/30 mt-8 pt-8 text-center text-white/70 text-sm">
+        &copy; {new Date().getFullYear()} KalaGhar. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
 );
 
-
 const AmbassadorDashboardPage = () => {
-    const { user, logout } = useAuth();
-    const [stats, setStats] = useState(null);
-    const [myArtisans, setMyArtisans] = useState([]);
-    const [nearbyAmbassadors, setNearbyAmbassadors] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [isProgressModalOpen, setIsProgressModalOpen] = useState(false);
-    const [isEventModalOpen, setIsEventModalOpen] = useState(false);
-    const [selectedArtisan, setSelectedArtisan] = useState(null);
+  const { user, logout } = useAuth();
+  const [stats, setStats] = useState(null);
+  const [myArtisans, setMyArtisans] = useState([]);
+  const [nearbyAmbassadors, setNearbyAmbassadors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isProgressModalOpen, setIsProgressModalOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [selectedArtisan, setSelectedArtisan] = useState(null);
 
-    useEffect(() => {
-        const fetchDashboardData = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                // This endpoint needs to be created in your backend
-                const { data } = await api.get("/ambassador/dashboard-summary");
-                setStats(data.stats);
-                setMyArtisans(data.artisans); // Assuming the API returns this
-                setNearbyAmbassadors(data.nearbyAmbassadors); // Assuming the API returns this
-            } catch (error) {
-                console.error("Failed to fetch dashboard data:", error);
-                setError("Could not load dashboard information. Please try refreshing the page.");
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchDashboardData();
-    }, []);
-
-    const openProgressModal = (artisan) => {
-        setSelectedArtisan(artisan);
-        setIsProgressModalOpen(true);
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const { data } = await api.get("/ambassador/dashboard-summary");
+        setStats(data.stats);
+        setMyArtisans(data.artisans);
+        setNearbyAmbassadors(data.nearbyAmbassadors);
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
+        setError(
+          "Could not load dashboard information. Please try refreshing the page."
+        );
+      } finally {
+        setLoading(false);
+      }
     };
+    fetchDashboardData();
+  }, []);
 
-    const statsData = [
-        {
-            label: "Artisans Mentored",
-            value: myArtisans?.length ?? 0,
-            icon: <UsersIcon />,
-            color: "google-blue",
-            borderColor: "border-google-blue",
-            link: "/ambassador/artisans",
-            description: "View your artisan network",
-        },
-        {
-            label: "Events Hosted",
-            value: stats?.eventsHosted ?? 0,
-            icon: <CalendarIcon />,
-            color: "google-green",
-            borderColor: "border-google-green",
-            link: "/ambassador/community",
-            description: "Manage and plan events",
-        },
-        {
-            label: "Your Impact Score",
-            value: stats?.impactScore ?? 0,
-            icon: <SparklesIcon />,
-            color: "google-yellow",
-            borderColor: "border-google-yellow",
-            link: "#",
-            description: "See the difference you're making",
-        },
-    ];
+  const openProgressModal = (artisan) => {
+    setSelectedArtisan(artisan);
+    setIsProgressModalOpen(true);
+  };
 
-    if (loading || !user) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                <div className="text-google-blue text-xl font-semibold">Loading Dashboard...</div>
-            </div>
-        );
-    }
+  const statsData = [
+    {
+      label: "Artisans Mentored",
+      value: myArtisans?.length ?? 0,
+      icon: <UsersIcon />,
+      color: "google-blue",
+      borderColor: "border-google-blue",
+      link: "/ambassador/artisans",
+      description: "View your artisan network",
+    },
+    {
+      label: "Events Hosted",
+      value: stats?.eventsHosted ?? 0,
+      icon: <CalendarIcon />,
+      color: "google-green",
+      borderColor: "border-google-green",
+      link: "/ambassador/community",
+      description: "Manage and plan events",
+    },
+    {
+      label: "Your Impact Score",
+      value: stats?.impactScore ?? 0,
+      icon: <SparklesIcon />,
+      color: "google-yellow",
+      borderColor: "border-google-yellow",
+      link: "#",
+      description: "See the difference you're making",
+    },
+  ];
 
-    if (error) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100 text-center p-4">
-                <p className="text-red-600 font-semibold">{error}</p>
-            </div>
-        );
-    }
-    
+  if (loading || !user) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-100">
+        <div className="text-google-blue text-xl font-semibold">
+          Loading Dashboard...
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 text-center p-4">
+        <p className="text-red-600 font-semibold">{error}</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <style>{`
-        .bg-google-blue { background-color: #4285F4; }
-        .text-google-blue { color: #4285F4; }
-        .border-google-blue { border-color: #4285F4; }
-        .bg-google-red { background-color: #DB4437; }
-        .text-google-red { color: #DB4437; }
-        .bg-google-yellow { background-color: #F4B400; }
-        .text-google-yellow { color: #F4B400; }
-        .border-google-yellow { border-color: #F4B400; }
-        .bg-google-green { background-color: #0F9D58; }
-        .text-google-green { color: #0F9D58; }
-        .border-google-green { border-color: #0F9D58; }
-        .main-bg { background-color: #F8F9FA; }
+        .bg-google-blue { background-color:
+        .text-google-blue { color:
+        .border-google-blue { border-color:
+        .bg-google-red { background-color:
+        .text-google-red { color:
+        .bg-google-yellow { background-color:
+        .text-google-yellow { color:
+        .border-google-yellow { border-color:
+        .bg-google-green { background-color:
+        .text-google-green { color:
+        .border-google-green { border-color:
+        .main-bg { background-color:
         @keyframes fade-in-scale { 0% { transform: scale(0.95); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .animate-fade-in-scale { animation: fade-in-scale 0.3s ease-out forwards; }
         @keyframes fade-in-down { 0% { opacity: 0; transform: translateY(-10px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -588,36 +588,38 @@ const AmbassadorDashboardPage = () => {
                       </h3>
                       <div className="space-y-4">
                         {myArtisans && myArtisans.length > 0 ? (
-                           myArtisans.map((artisan) => (
-                          <div
-                            key={artisan.name}
-                            className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                          >
-                            <div className="flex items-center">
-                              <img
-                                src={artisan.imageUrl}
-                                alt={artisan.name}
-                                className="h-12 w-12 rounded-full mr-4"
-                              />
-                              <div>
-                                <p className="font-bold text-gray-800">
-                                  {artisan.name}
-                                </p>
-                                <p className="text-sm text-gray-500">
-                                  {artisan.craft}
-                                </p>
-                              </div>
-                            </div>
-                            <button
-                              onClick={() => openProgressModal(artisan)}
-                              className="text-sm font-semibold text-google-blue hover:underline"
+                          myArtisans.map((artisan) => (
+                            <div
+                              key={artisan.name}
+                              className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                             >
-                              View Progress
-                            </button>
-                          </div>
-                        ))
+                              <div className="flex items-center">
+                                <img
+                                  src={artisan.imageUrl}
+                                  alt={artisan.name}
+                                  className="h-12 w-12 rounded-full mr-4"
+                                />
+                                <div>
+                                  <p className="font-bold text-gray-800">
+                                    {artisan.name}
+                                  </p>
+                                  <p className="text-sm text-gray-500">
+                                    {artisan.craft}
+                                  </p>
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => openProgressModal(artisan)}
+                                className="text-sm font-semibold text-google-blue hover:underline"
+                              >
+                                View Progress
+                              </button>
+                            </div>
+                          ))
                         ) : (
-                            <p className="text-center text-gray-500 py-6">You are not mentoring any artisans yet.</p>
+                          <p className="text-center text-gray-500 py-6">
+                            You are not mentoring any artisans yet.
+                          </p>
                         )}
                       </div>
                     </div>
@@ -677,22 +679,24 @@ const AmbassadorDashboardPage = () => {
                       </h3>
                       <div className="space-y-3">
                         {nearbyAmbassadors && nearbyAmbassadors.length > 0 ? (
-                            nearbyAmbassadors.map((ambassador) => (
-                          <div
-                            key={ambassador.name}
-                            className="flex items-center text-sm"
-                          >
-                            <LocationMarkerIcon className="text-gray-400 mr-2 flex-shrink-0" />
-                            <p className="font-semibold text-gray-700">
-                              {ambassador.name}
-                            </p>
-                            <p className="text-gray-500 ml-auto">
-                              {ambassador.distance}
-                            </p>
-                          </div>
-                        ))
+                          nearbyAmbassadors.map((ambassador) => (
+                            <div
+                              key={ambassador.name}
+                              className="flex items-center text-sm"
+                            >
+                              <LocationMarkerIcon className="text-gray-400 mr-2 flex-shrink-0" />
+                              <p className="font-semibold text-gray-700">
+                                {ambassador.name}
+                              </p>
+                              <p className="text-gray-500 ml-auto">
+                                {ambassador.distance}
+                              </p>
+                            </div>
+                          ))
                         ) : (
-                            <p className="text-center text-gray-500 text-sm">No other ambassadors found in your area.</p>
+                          <p className="text-center text-gray-500 text-sm">
+                            No other ambassadors found in your area.
+                          </p>
                         )}
                       </div>
                     </div>
