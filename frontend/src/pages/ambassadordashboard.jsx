@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axiosConfig";
 
-// --- START OF CHANGES ---
-// 1. Import NavLink for proper routing
 import { NavLink } from "react-router-dom"; 
-// --- END OF CHANGES ---
+
 
 
 const AnimatedSection = ({ children, className = "" }) => {

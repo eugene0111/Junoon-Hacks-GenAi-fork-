@@ -22,6 +22,7 @@ import AnimatedPage from "../../components/ui/AnimatedPage";
 import api from "../../api/axiosConfig";
 import SkeletonStat from "../../components/ui/SkeletonStat";
 import SkeletonListItem from "../../components/ui/SkeletonListItem";
+import AnimatedSection from "../../components/ui/AnimatedSection";
 
 ChartJS.register(
   CategoryScale,
@@ -92,11 +93,31 @@ const Dashboard = () => {
   }
 
   return (
-    <AnimatedPage className="pb=0">
-      <div className="bg-gray-50 min-h-screen">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">
-          Ambassador Dashboard
-        </h1>
+    
+      <div className="pb-8">
+        <AnimatedSection className="mb-10 md:mb-12">
+        <div
+          className="relative p-8 md:p-10  shadow-xl overflow-hidden text-white"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/2.png')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <header className="relative z-10 text-center">
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-2">
+              <span className="text-google-yellow">Your</span> Ambassador{" "}
+              <span className="text-white">Dashboard</span>
+            </h1>
+            <p
+              className="text-lg text-white/90 max-w-2xl mx-auto"
+              style={{ textShadow: "0 2px 4px rgba(0,0,0,0.3)" }}
+            >
+              Welcome back, track your impact and see how your support is !
+            </p>
+          </header>
+        </div>
+      </AnimatedSection>
 
         {}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -244,7 +265,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </AnimatedPage>
+    
   );
 };
 

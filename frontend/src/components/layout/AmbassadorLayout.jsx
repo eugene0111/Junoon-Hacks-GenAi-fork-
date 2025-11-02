@@ -187,13 +187,11 @@ const AmbassadorHeader = () => {
 
 const AmbassadorLayout = () => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="font-sans bg-gray-50 min-h-screen">
       <AmbassadorHeader />
-      <main className="main-page-content flex-1 overflow-y-auto pb-8">
-        <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-          <Outlet />
-        </div>
-      </main>
+      <main className="main-page-content "></main>
+      <Outlet />
+      {}
     </div>
   );
 };
