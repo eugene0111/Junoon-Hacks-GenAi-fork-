@@ -118,7 +118,6 @@ const LoginModal = ({ isOpen, onClose, selectedRole }) => {
             setPassword('');
             setState('');
             setCity('');
-            // setLanguage('en');
             setLanguage('en-IN');
             setAvailableCities([]);
         }
@@ -218,7 +217,6 @@ const LoginModal = ({ isOpen, onClose, selectedRole }) => {
               </p>
               
               <form onSubmit={handleSubmit} className="space-y-4">
-                {}
                 <AnimatePresence mode="wait">
                   {!isLoginView && (
                     <motion.div 
@@ -319,7 +317,6 @@ const LoginModal = ({ isOpen, onClose, selectedRole }) => {
                   )}
                 </AnimatePresence>
                 
-                {}
                 <AnimatePresence>
                   {error && (
                     <motion.div 
@@ -361,6 +358,17 @@ const LoginModal = ({ isOpen, onClose, selectedRole }) => {
                     {isLoginView ? 'Sign Up' : 'Log In'}
                 </button>
               </p>
+
+              <div className="mt-4 text-center">
+                <p className="text-xs text-gray-500">
+                  Demo Login:
+                  <br />
+                  vijwal1234@mail.com
+                  <br />
+                  vijwal
+                </p>
+              </div>
+
             </motion.div>
           </motion.div>
         )}
