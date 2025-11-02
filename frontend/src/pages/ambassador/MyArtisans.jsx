@@ -27,11 +27,9 @@ const MyArtisans = () => {
       setLoading(true);
       setError("");
       try {
-        // First, get all artisans
-        const artisansResponse = await api.get("/users/artisans/nearest");
+        const artisansResponse = await api.get("/users/artisans");
         const allArtisans = artisansResponse.data.artisans || [];
         
-        // Then, get mentorship status for each artisan
         const statusPromises = allArtisans.map(artisan => 
           api.get(`/mentorship/status/${artisan.id}`)
             .then(res => ({ id: artisan.id, status: res.data.status }))
@@ -44,7 +42,6 @@ const MyArtisans = () => {
           statusMap[id] = status;
         });
 
-        // Filter only artisans that you are mentoring
         const mentoredArtisans = allArtisans.filter(
           artisan => statusMap[artisan.id] === 'active'
         );

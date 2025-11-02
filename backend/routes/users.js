@@ -98,7 +98,7 @@ router.get("/artisans/nearest", auth, async (req, res) => {
 
 router.get("/artisans", async (req, res) => {
   try {
-    const { page = 1, limit = 12, location, specialty } = req.query;
+    const { page = 1, limit = 50, location, specialty } = req.query;
 
     const filter = { role: "artisan" };
     if (location) filter["profile.location.city"] = location;
