@@ -16,61 +16,77 @@ import { MobileSidebarProvider } from "./context/MobileSidebarContext";
 import { MobileSidebar } from "./components/layout/MobileSidebar";
 import Loader from "./components/ui/Loader";
 
-
-
-// Layouts & Common
 const Header = lazy(() => import("./components/layout/Header.jsx"));
 const Footer = lazy(() => import("./components/layout/Footer.jsx"));
-const ArtisanLayout = lazy(() => import("./components/layout/ArtisanLayout.jsx"));
-const AmbassadorLayout = lazy(() => import("./components/layout/AmbassadorLayout.jsx"));
-const InvestorLayout = lazy(() => import("./components/layout/InvestorLayout.jsx"));
+const ArtisanLayout = lazy(() =>
+  import("./components/layout/ArtisanLayout.jsx")
+);
+const AmbassadorLayout = lazy(() =>
+  import("./components/layout/AmbassadorLayout.jsx")
+);
+const InvestorLayout = lazy(() =>
+  import("./components/layout/InvestorLayout.jsx")
+);
 const BuyerLayout = lazy(() => import("./components/layout/BuyerLayout.jsx"));
-
-// Top-Level Pages
 const LandingPage = lazy(() => import("./pages/LandingPage.jsx"));
 const AmbassadorPage = lazy(() => import("./pages/ambassador.jsx"));
 const ArtisanPage = lazy(() => import("./pages/artisan.jsx"));
 const SellerPage = lazy(() => import("./pages/common/SellerPage.jsx"));
 const ProductPage = lazy(() => import("./pages/common/ProductPage.jsx"));
-
-// Buyer Pages
 const BuyerMarket = lazy(() => import("./pages/buyermarket/buyermarket.jsx"));
 const CartPage = lazy(() => import("./pages/buyermarket/cartpage.jsx"));
 const NewIdeasPage = lazy(() => import("./pages/buyermarket/newIdeas.jsx"));
-const OurArtisansPage = lazy(() => import("./pages/buyermarket/ourArtisans.jsx"));
-
-// Artisan Pages
-const ArtisanDashboard = lazy(() => import("./pages/artisan/ArtisanDashboard.jsx"));
+const OurArtisansPage = lazy(() =>
+  import("./pages/buyermarket/ourArtisans.jsx")
+);
+const ArtisanDashboard = lazy(() =>
+  import("./pages/artisan/ArtisanDashboard.jsx")
+);
 const MyProductsPage = lazy(() => import("./pages/artisan/MyProductsPage.jsx"));
-const ProductEditPage = lazy(() => import("./pages/artisan/ProductEditPage.jsx"));
-const ArtisanProfilePage = lazy(() => import("./pages/artisan/ArtisanProfilePage.jsx"));
+const ProductEditPage = lazy(() =>
+  import("./pages/artisan/ProductEditPage.jsx")
+);
+const ArtisanProfilePage = lazy(() =>
+  import("./pages/artisan/ArtisanProfilePage.jsx")
+);
 const MyOrdersPage = lazy(() => import("./pages/artisan/MyOrdersPage.jsx"));
-const IdeaSubmissionPage = lazy(() => import("./pages/artisan/IdeaSubmissionPage.jsx"));
+const IdeaSubmissionPage = lazy(() =>
+  import("./pages/artisan/IdeaSubmissionPage.jsx")
+);
 const GrantsPage = lazy(() => import("./pages/artisan/GrantsPage.jsx"));
 const AITrendsPage = lazy(() => import("./pages/artisan/AITrendsPage.jsx"));
 const CommunityPage = lazy(() => import("./pages/artisan/CommunityPage.jsx"));
 const LogiPage = lazy(() => import("./pages/artisan/LogiPage.jsx"));
 const DiscussionPage = lazy(() => import("./pages/artisan/DiscussionPage.jsx"));
-const DiscussionThreadPage = lazy(() => import("./pages/artisan/DiscussionThreadPage.jsx"));
+const DiscussionThreadPage = lazy(() =>
+  import("./pages/artisan/DiscussionThreadPage.jsx")
+);
 const ReviewsPage = lazy(() => import("./pages/artisan/ReviewsPage.jsx"));
-const RawMaterialsPage = lazy(() => import("./pages/artisan/RawMaterialsPage.jsx"));
-const MaterialsCatalogPage = lazy(() => import("./pages/artisan/MaterialsCatalogPage.jsx"));
-
-// Ambassador Pages
-const AmbassadorDashboard = lazy(() => import("./pages/ambassador/Dashboard.jsx"));
+const RawMaterialsPage = lazy(() =>
+  import("./pages/artisan/RawMaterialsPage.jsx")
+);
+const MaterialsCatalogPage = lazy(() =>
+  import("./pages/artisan/MaterialsCatalogPage.jsx")
+);
+const AmbassadorDashboard = lazy(() =>
+  import("./pages/ambassador/Dashboard.jsx")
+);
 const MyArtisans = lazy(() => import("./pages/ambassador/MyArtisans.jsx"));
 const CommunityHub = lazy(() => import("./pages/ambassador/CommunityHub.jsx"));
 const Profile = lazy(() => import("./pages/ambassador/Profile.jsx"));
 const FindArtisans = lazy(() => import("./pages/ambassador/FindArtisans.jsx"));
-
-// Investor Pages
-const InvestorDashboard = lazy(() => import("./pages/investor/InverstorDashboard.jsx"));
-const BrowseArtisans = lazy(() => import("./pages/investor/BrowseArtisans.jsx"));
-const InvestmentPortfolio = lazy(() => import("./pages/investor/InvestmentPortfolio.jsx"));
-const InvestorProfile = lazy(() => import("./pages/investor/InvestorProfile.jsx"));
-
-
-
+const InvestorDashboard = lazy(() =>
+  import("./pages/investor/InverstorDashboard.jsx")
+);
+const BrowseArtisans = lazy(() =>
+  import("./pages/investor/BrowseArtisans.jsx")
+);
+const InvestmentPortfolio = lazy(() =>
+  import("./pages/investor/InvestmentPortfolio.jsx")
+);
+const InvestorProfile = lazy(() =>
+  import("./pages/investor/InvestorProfile.jsx")
+);
 
 const AppLayout = () => {
   const location = useLocation();
@@ -79,7 +95,6 @@ const AppLayout = () => {
 
   return (
     <>
-      
       <Suspense fallback={<div className="h-16" />}>
         {!shouldHide && <Header />}
       </Suspense>
@@ -88,10 +103,8 @@ const AppLayout = () => {
       <MobileSidebar />
       <main>
         <AnimatePresence mode="wait">
-          
           <Suspense fallback={<Loader fullPage />}>
             <Routes location={location} key={location.pathname}>
-            
               <Route path="/" element={<LandingPage />} />
               <Route
                 path="/ambassador-page"
@@ -429,10 +442,8 @@ const AppLayout = () => {
           </Suspense>
         </AnimatePresence>
       </main>
-      
-      <Suspense fallback={null}>
-        {!shouldHide && <Footer />}
-      </Suspense>
+
+      <Suspense fallback={null}>{!shouldHide && <Footer />}</Suspense>
     </>
   );
 };
@@ -443,8 +454,8 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <MobileSidebarProvider>
-          <ScrollToTop />
-          <AppLayout />
+            <ScrollToTop />
+            <AppLayout />
           </MobileSidebarProvider>
         </CartProvider>
       </AuthProvider>
@@ -453,4 +464,3 @@ function App() {
 }
 
 export default App;
-
