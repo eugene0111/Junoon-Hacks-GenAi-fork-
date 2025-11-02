@@ -20,14 +20,37 @@ const MyArtisans = () => {
   const [artisans, setArtisans] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [mentorshipStatuses, setMentorshipStatuses] = useState({});
 
   useEffect(() => {
     const fetchArtisans = async () => {
       setLoading(true);
       setError("");
       try {
-        const response = await api.get("/ambassador/artisans");
-        setArtisans(response.data.artisans || []);
+        // First, get all artisans
+        const artisansResponse = await api.get("/users/artisans/nearest");
+        const allArtisans = artisansResponse.data.artisans || [];
+        
+        // Then, get mentorship status for each artisan
+        const statusPromises = allArtisans.map(artisan => 
+          api.get(`/mentorship/status/${artisan.id}`)
+            .then(res => ({ id: artisan.id, status: res.data.status }))
+            .catch(() => ({ id: artisan.id, status: 'available' }))
+        );
+
+        const statuses = await Promise.all(statusPromises);
+        const statusMap = {};
+        statuses.forEach(({ id, status }) => {
+          statusMap[id] = status;
+        });
+
+        // Filter only artisans that you are mentoring
+        const mentoredArtisans = allArtisans.filter(
+          artisan => statusMap[artisan.id] === 'active'
+        );
+
+        setArtisans(mentoredArtisans);
+        setMentorshipStatuses(statusMap);
       } catch (err) {
         console.error("Failed to fetch artisans:", err);
         setError("Could not load your mentored artisans. Please try again.");
