@@ -1,100 +1,72 @@
-# KalaGhar - Artisan Marketplace Platform
+# KalaGhar - The Artisan Marketplace Platform
 
-> Empowering artisans worldwide through AI-powered tools and global marketplace access
-## 🌟 Overview
+![KalaGhar Logo](https://storage.googleapis.com/kalaghar/logo.png)
 
-KalaGhar is a comprehensive e-commerce platform connecting artisans with buyers, investors, and ambassadors. Built with React, Node.js, Firebase, and Google Gemini AI.
+Empowering global artisans with AI-powered tools and direct marketplace access.
 
-## ✨ Key Features
+## Overview
 
-- 🤖 **AI-Powered Tools** - Trend analysis, description generation, price suggestions, voice assistant
-- 🎨 **Artisan Dashboard** - Product management, order tracking, funding opportunities
-- 🛍️ **Buyer Marketplace** - Browse handcrafted products, vote on new ideas
-- 💰 **Investor Matching** - AI-driven funding recommendations
-- 🤝 **Community Hub** - Connect with local artisans and ambassadors
-
-## 🛠 Tech Stack
-
-**Frontend:** React 19, Vite, Tailwind CSS, Firebase Auth  
-**Backend:** Node.js, Express, Firebase Firestore, Google Gemini AI  
-
-## 🚀 Quick Start
-
-### Prerequisites
-```bash
-Node.js >= 18.0.0
-npm >= 9.0.0
-```
-
-### Installation
-
-1. **Clone the repository**
-```bash
-git clone https://github.com/KhushiGupta30/Junoon-Hacks-GenAi.git
-cd kalaghar
-```
-
-2. **Backend Setup**
-```bash
-cd backend
-npm install
-```
-
-Create `backend/.env`:
-```env
-PORT=3000
-NODE_ENV=development
-FIREBASE_CREDS={"type":"service_account",...}
-GEMINI_API_KEY=your_gemini_api_key
-CORS_ORIGIN=https://localhost:5173
-```
-
-Start backend:
-```bash
-npm run dev
-```
-
-3. **Frontend Setup**
-```bash
-cd frontend
-npm install
-```
-
-Create `frontend/.env`:
-```env
-VITE_API_URL=http://localhost:3000/api
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your-project-id
-VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-```
-
-Start frontend:
-```bash
-npm run dev
-```
-
-Visit `https://localhost:5173`
-
-## 📁 Project Structure
-```
-kalaghar/
-├── backend/
-│   ├── routes/          # API endpoints
-│   ├── services/        # Business logic
-│   ├── middleware/      # Auth & validation
-│   └── server.js
-└── frontend/
-    ├── src/
-    │   ├── components/  # React components
-    │   ├── pages/       # Page components
-    │   ├── context/     # State management
-    │   └── api/         # API configuration
-    └── public/
-```
-
-Website: [junoon-hacks-gen-ai.vercel.app](https://junoon-hacks-gen-ai.vercel.app/)
+KalaGhar is a comprehensive e-commerce ecosystem designed to bridge the gap between traditional artisans and the modern digital market. It provides a suite of intelligent tools that manage e-commerce, logistics, and business growth, allowing creators to focus on what they do best — creating.
 
 ---
+
+## The KalaGhar Ecosystem: Four Key Roles
+
+Our platform is built around four interconnected user roles, forming a cycle of creation, discovery, funding, and community growth.
+
+### Artisan  
+The heart of the platform. Artisans receive an AI-powered suite to manage their business — from creating product listings and analyzing trends to fulfilling orders and securing funding.
+
+### Buyer  
+The conscious consumer. Buyers discover unique handcrafted products, connect directly with creators, and influence future products by voting on new ideas.
+
+### Investor  
+The growth partner. Investors find and fund promising artisans, supporting cultural heritage while gaining access to a meaningful and growing asset class.
+
+### Ambassador  
+The community champion. Volunteers who mentor artisans, foster local communities, and help bridge the digital divide.
+
+---
+
+## Key Features
+
+### AI-Powered Artisan Toolkit
+- **Trend Hub:** AI-driven insights on popular categories, materials, and styles  
+- **Content Generation:** Automatically generate high-quality product descriptions and titles  
+- **Price Suggestion:** Competitive, data-backed pricing recommendations  
+- **Funding Advisor:** Personalized reports matching artisans with investors and government schemes  
+- **Voice Assistant:** Conversational AI providing insights and assistance  
+
+### Artisan Dashboard
+- Full product and inventory management (including *Made to Order*)  
+- End-to-end order tracking and fulfillment  
+- Direct engagement with customers through reviews and replies  
+
+### Buyer Marketplace
+- Browse authentic products by category, artisan, or trend  
+- **Idea Hub:** Vote on new, unreleased product concepts from artisans  
+- View artisan profiles and stories  
+- Seamless cart and checkout experience  
+
+### Community & Growth
+- **Logistics Advisor:** AI-based recommendations for efficient shipping partners  
+- **Raw Materials Marketplace:** Source ethically-produced materials through a curated catalog  
+- **Community Hub:** Connect with local artisans, discover events, and engage with regional ambassadors  
+
+---
+
+## Tech Stack
+
+| Category | Technologies |
+|-----------|---------------|
+| **Frontend** | React 19, Vite, Tailwind CSS, Framer Motion, React Router, Chart.js |
+| **Backend** | Node.js, Express.js |
+| **Database** | Firebase Firestore (NoSQL) |
+| **Authentication** | Firebase Authentication |
+| **Cloud Services & APIs** | Google Gemini AI, Google Cloud Storage, Google Maps API, Google Translate API, Google Custom Search API, Google Text-to-Speech |
+
+
+
+## Website
+
+[https://junoon-hacks-gen-ai.vercel.app](https://junoon-hacks-gen-ai.vercel.app)
