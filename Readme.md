@@ -1,6 +1,6 @@
 # KalaGhar - The Artisan Marketplace Platform
 
-![KalaGhar Logo](https://storage.googleapis.com/kalaghar/logo.png)
+<img src="https://storage.googleapis.com/kalaghar/logo.png" alt="KalaGhar Logo" width="160"/>
 
 Empowering global artisans with AI-powered tools and direct marketplace access.
 
