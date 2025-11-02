@@ -7,8 +7,11 @@ const router = express.Router();
 
 const getOrderStatus = (order) => {
   if (Array.isArray(order.timeline) && order.timeline.length > 0) {
-    // Prioritize the most recent status from the timeline
-    return order.timeline[order.timeline.length - 1].status || order.status || "unknown";
+    return (
+      order.timeline[order.timeline.length - 1].status ||
+      order.status ||
+      "unknown"
+    );
   }
   return order.status || "unknown";
 };

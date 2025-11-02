@@ -19,9 +19,6 @@ class AmbassadorService extends BaseService {
 
   async getDashboardSummary(ambassadorId) {
     try {
-      // --- START OF FIX ---
-
-      // 1. Fetch ACTIVE mentorships to calculate onboarded artisans and earnings (This part is correct)
       const activeMentorships = await MentorshipService.findMany({
         ambassadorId: ambassadorId,
         status: "active",
@@ -35,18 +32,11 @@ class AmbassadorService extends BaseService {
 
       const artisansOnboarded = artisans.length;
 
-      // 2. THIS IS THE NEW, CORRECT LOGIC FOR PENDING APPROVALS
-      // Directly query the mentorships collection for requests sent by this ambassador that are still pending.
       const pendingRequests = await MentorshipService.findMany({
         ambassadorId: ambassadorId,
         status: "pending",
       });
       const pendingApprovals = pendingRequests.length;
-
-      // 3. THE OLD, INCORRECT LOGIC IS REMOVED.
-      // We are no longer filtering the 'artisans' array by status.
-
-      // --- END OF FIX ---
 
       const totalArtisanEarnings = artisans.reduce(
         (sum, artisan) => sum + (artisan.sales || 0) * 150,

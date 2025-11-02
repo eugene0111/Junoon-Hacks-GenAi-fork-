@@ -2,7 +2,7 @@ const express = require("express");
 const { auth, authorize } = require("../middleware/auth");
 const OrderService = require("../services/OrderService");
 const ProductService = require("../services/ProductService");
-const { db } = require("../firebase"); // Import db for direct queries
+const { db } = require("../firebase");
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.get("/artisan-stats", [auth, authorize("artisan")], async (req, res) => {
     const recentOrdersSnapshot = await db
       .collection("orders")
       .where("artisanIds", "array-contains", artisanId)
-      .where('status', 'in', ['shipped', 'delivered'])
+      .where("status", "in", ["shipped", "delivered"])
       .where("createdAt", ">=", sevenDaysAgo)
       .get();
 
@@ -25,7 +25,7 @@ router.get("/artisan-stats", [auth, authorize("artisan")], async (req, res) => {
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
-      const label = d.toLocaleDateString("en-US", { weekday: "short" }); // e.g., "Mon"
+      const label = d.toLocaleDateString("en-US", { weekday: "short" });
       dateLabels.push(label);
       dailySales.set(label, 0);
     }

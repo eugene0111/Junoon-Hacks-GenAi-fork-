@@ -82,10 +82,10 @@ router.post(
         "Other",
       ])
       .withMessage("Invalid category"),
-      body("status")
-        .optional()
-        .isIn(["published"])
-        .withMessage("Invalid status value"),
+    body("status")
+      .optional()
+      .isIn(["published"])
+      .withMessage("Invalid status value"),
   ],
   async (req, res) => {
     try {
@@ -100,7 +100,6 @@ router.post(
         status: "published",
       });
 
-      // Populate artisan data
       const artisan = await UserService.findById(idea.artisan);
       const populatedIdea = {
         ...idea,

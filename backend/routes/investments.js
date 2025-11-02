@@ -94,7 +94,6 @@ router.get("/", auth, async (req, res) => {
 
     const investments = await InvestmentService.findMany(filter, options);
 
-    // Populate investor and artisan data
     const populatedInvestments = await Promise.all(
       investments.map(async (investment) => {
         const investor = await UserService.findById(investment.investor);
