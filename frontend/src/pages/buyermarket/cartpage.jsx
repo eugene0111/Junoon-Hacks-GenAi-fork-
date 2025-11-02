@@ -54,6 +54,7 @@ export default function CartPage() {
     try {
       await placeOrder(shippingInfo);
       setOrderSuccess(true);
+
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -155,7 +156,7 @@ export default function CartPage() {
                         min="1"
                       />
                       <p className="font-semibold w-24 text-right">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ₹{(item.price * item.quantity).toFixed(2)}
                       </p>
                       <button
                         onClick={() => removeFromCart(item._id)}
@@ -173,7 +174,7 @@ export default function CartPage() {
                 </h2>
                 <div className="flex justify-between mb-2">
                   <p>Subtotal</p>
-                  <p>${cartTotal.toFixed(2)}</p>
+                  <p>₹{cartTotal.toFixed(2)}</p>
                 </div>
                 <div className="flex justify-between mb-4">
                   <p>Shipping</p>
@@ -181,7 +182,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between font-bold text-xl border-t pt-4">
                   <p>Total</p>
-                  <p>${cartTotal.toFixed(2)}</p>
+                  <p>₹{cartTotal.toFixed(2)}</p>
                 </div>
 
                 <form onSubmit={handlePlaceOrder} className="mt-6 space-y-3">

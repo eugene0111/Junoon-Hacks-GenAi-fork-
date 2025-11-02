@@ -31,11 +31,10 @@ const SkeletonSidebarCard = () => <SkeletonBase className="h-64" />;
 const TabButton = ({ title, isActive, onClick }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2.5 text-sm transition-colors relative whitespace-nowrap ${
-      isActive
+    className={`px-4 py-2.5 text-sm transition-colors relative whitespace-nowrap ${isActive
         ? "text-google-blue font-medium"
         : "text-gray-500 hover:text-gray-700 hover:bg-gray-100/60 rounded-t-md"
-    }`}
+      }`}
     aria-current={isActive ? "page" : undefined}
   >
     {title}
@@ -44,11 +43,13 @@ const TabButton = ({ title, isActive, onClick }) => (
     )}
   </button>
 );
+
+// [FIXED] Correctly determines order status by checking timeline first, then falling back to the main status property.
 const getOrderStatus = (order) => {
   if (Array.isArray(order.timeline) && order.timeline.length > 0) {
-    return order.timeline[order.timeline.length - 1].status || "unknown";
+    return order.timeline[order.timeline.length - 1].status || order.status || "unknown";
   }
-  return "unknown";
+  return order.status || "unknown";
 };
 
 const MyOrdersPage = () => {
@@ -89,12 +90,10 @@ const MyOrdersPage = () => {
     );
 
     sortedOrders.forEach((order) => {
-      if (
-        isBulkOrder(order) &&
-        pendingStatuses.includes(getOrderStatus(order))
-      ) {
+      const status = getOrderStatus(order);
+      if (isBulkOrder(order) && pendingStatuses.includes(status)) {
         bulk.push(order);
-      } else if (pendingStatuses.includes(getOrderStatus(order))) {
+      } else if (pendingStatuses.includes(status)) {
         pending.push(order);
       } else {
         completed.push(order);
@@ -107,35 +106,15 @@ const MyOrdersPage = () => {
     };
   }, [orders]);
 
-  const handleStatusChange = async (orderId, newStatus) => {
-    const originalOrders = [...orders];
-    setOrders((currentOrders) =>
-      currentOrders.map((o) =>
-        o.id === orderId ? { ...o, status: newStatus } : o
-      )
-    );
-
-    try {
-      await api.put(`/orders/${orderId}/status`, { status: newStatus });
-      console.log(`Order ${orderId} status updated to ${newStatus}`);
-    } catch (err) {
-      console.error("Failed to update status:", err);
-      setOrders(originalOrders);
-      alert("Failed to update order status.");
-    }
-  };
 
   if (loading) {
     return (
       <div className="flex flex-col lg:flex-row gap-10 px-6 md:px-8 py-8 md:py-10 bg-gradient-to-br from-[#F8F9FA] via-[#F1F3F4] to-[#E8F0FE] min-h-screen">
-        {}
         <div className="flex-grow space-y-8">
-          <SkeletonBase className="h-10 w-3/4 mb-4" /> {}
-          <SkeletonBase className="h-10 w-full mb-6" /> {}
-          {}
+          <SkeletonBase className="h-10 w-3/4 mb-4" />
+          <SkeletonBase className="h-10 w-full mb-6" />
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 h-96 animate-pulse" />
         </div>
-        {}
         <div className="lg:w-80 flex-shrink-0 space-y-6">
           <SkeletonSidebarCard />
         </div>
@@ -173,44 +152,28 @@ const MyOrdersPage = () => {
   }
 
   const formatDate = (dateInput) => {
-    if (!dateInput) {
-      return "---";
-    }
-    let date;
-    if (typeof dateInput === "object" && dateInput.seconds) {
-      date = new Date(dateInput.seconds * 1000);
-    } else {
-      date = new Date(dateInput);
-    }
-    if (isNaN(date.getTime())) {
-      return "Invalid Date";
-    }
+    if (!dateInput) return "---";
+    let date = dateInput.seconds ? new Date(dateInput.seconds * 1000) : new Date(dateInput);
+    if (isNaN(date.getTime())) return "Invalid Date";
     return date.toLocaleDateString("en-GB", {
       year: "numeric",
       month: "short",
       day: "2-digit",
     });
   };
-  const statusOptions = [
-    "pending",
-    "confirmed",
-    "processing",
-    "shipped",
-    "delivered",
-    "cancelled",
-  ];
+
   const statusColors = {
-    pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
-    confirmed: "bg-blue-100 text-blue-800 border-blue-300",
-    processing: "bg-purple-100 text-purple-800 border-purple-300",
-    shipped: "bg-indigo-100 text-indigo-800 border-indigo-300",
-    delivered: "bg-green-100 text-green-800 border-green-300",
-    cancelled: "bg-red-100 text-red-800 border-red-300",
+    pending: "bg-yellow-100 text-yellow-800",
+    confirmed: "bg-blue-100 text-blue-800",
+    processing: "bg-purple-100 text-purple-800",
+    shipped: "bg-indigo-100 text-indigo-800",
+    delivered: "bg-green-100 text-green-800",
+    cancelled: "bg-red-100 text-red-800",
   };
+  const shippableStatuses = ["pending", "confirmed", "processing"];
 
   return (
     <div className="flex flex-col lg:flex-row gap-10 px-6 md:px-8 py-8 md:py-10 bg-gradient-to-br from-[#F8F9FA] via-[#F1F3F4] to-[#E8F0FE] min-h-screen">
-      {}
       <div className="flex-grow lg:w-2/3">
         <AnimatedSection className="mb-8 pt-8 text-center">
           <h1
@@ -227,10 +190,8 @@ const MyOrdersPage = () => {
           </p>
         </AnimatedSection>
 
-        {}
         <div className="border-b border-gray-200 mb-8 sticky top-16 bg-white/80 backdrop-blur-sm z-30 -mx-6 md:-mx-8 px-6 md:px-8 pb-0">
           <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
-            {}
             <TabButton
               title={`Pending Orders (${pendingOrders.length})`}
               isActive={activeTab === "pending"}
@@ -245,11 +206,8 @@ const MyOrdersPage = () => {
         </div>
 
         <AnimatedSection>
-          {}
           {activeTab === "pending" && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              {}
-              {}
               {pendingOrders.length === 0 ? (
                 <div className="text-center py-16 px-6">
                   <div className="inline-flex items-center justify-center p-4 bg-green-100 rounded-full mb-4 text-green-500">
@@ -269,7 +227,7 @@ const MyOrdersPage = () => {
                       <tr className="text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <th className="px-4 py-3">Order Details</th>
                         <th className="px-4 py-3 text-right">Total</th>
-                        <th className="px-4 py-3 text-center w-40">Status</th>
+                        <th className="px-4 py-3 text-center w-48">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -288,36 +246,17 @@ const MyOrdersPage = () => {
                             <p className="text-xs text-gray-500 mt-0.5">
                               {formatDate(order.createdAt)}
                             </p>
-                            <p
-                              className="text-xs text-gray-500 mt-1.5 truncate"
-                              title={order.items
-                                .map((i) => i.product?.name)
-                                .join(", ")}
-                            >
-                              {order.items.length} item(s)
-                            </p>
                           </td>
                           <td className="px-4 py-3 font-medium text-gray-800 text-right whitespace-nowrap align-top">
-                            ${order.pricing?.total?.toFixed(2) || "0.00"}
+                            ₹{order.pricing?.total?.toFixed(2) || "0.00"}
                           </td>
-                          <td className="px-4 py-3 text-center align-top w-40">
-                            <select
-                              value={getOrderStatus(order)}
-                              onChange={(e) =>
-                                handleStatusChange(order.id, e.target.value)
-                              }
-                              className={`block w-full text-xs font-medium px-2 py-1 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-google-blue focus:border-google-blue transition ${
-                                statusColors[getOrderStatus(order)] ||
-                                "bg-gray-100 text-gray-800 border-gray-200"
-                              }`}
+                          <td className="px-4 py-3 text-center align-top w-48">
+                            <Link
+                              to="/artisan/logistics"
+                              className="inline-flex items-center justify-center bg-google-blue text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-opacity-90 transition-colors shadow-sm"
                             >
-                              {statusOptions.map((status) => (
-                                <option key={status} value={status}>
-                                  {status.charAt(0).toUpperCase() +
-                                    status.slice(1)}
-                                </option>
-                              ))}
-                            </select>
+                              Prepare Shipment
+                            </Link>
                           </td>
                         </tr>
                       ))}
@@ -328,11 +267,8 @@ const MyOrdersPage = () => {
             </div>
           )}
 
-          {}
           {activeTab === "bulk" && (
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              {}
-              {}
               {bulkOrders.length === 0 ? (
                 <div className="text-center py-16 px-6">
                   <div className="inline-flex items-center justify-center p-4 bg-gray-100 rounded-full mb-4 text-gray-400">
@@ -347,15 +283,13 @@ const MyOrdersPage = () => {
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  {}
                   <table className="w-full text-left text-sm">
                     <thead className="bg-gray-50 border-b border-gray-200">
-                      {}
                       <tr className="text-xs font-medium text-gray-500 uppercase tracking-wider">
                         <th className="px-4 py-3">Order Details</th>
                         <th className="px-4 py-3 text-center">Total Items</th>
                         <th className="px-4 py-3 text-right">Total</th>
-                        <th className="px-4 py-3 text-center w-40">Status</th>
+                        <th className="px-4 py-3 text-center w-48">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -382,26 +316,15 @@ const MyOrdersPage = () => {
                             )}
                           </td>
                           <td className="px-4 py-3 font-medium text-gray-800 text-right whitespace-nowrap align-top">
-                            ${order.pricing?.total?.toFixed(2) || "0.00"}
+                            ₹{order.pricing?.total?.toFixed(2) || "0.00"}
                           </td>
-                          <td className="px-4 py-3 text-center align-top w-40">
-                            <select
-                              value={getOrderStatus(order)}
-                              onChange={(e) =>
-                                handleStatusChange(order.id, e.target.value)
-                              }
-                              className={`block w-full text-xs font-medium px-2 py-1 border rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-google-blue focus:border-google-blue transition ${
-                                statusColors[getOrderStatus(order)] ||
-                                "bg-gray-100 text-gray-800 border-gray-200"
-                              }`}
+                          <td className="px-4 py-3 text-center align-top w-48">
+                            <Link
+                              to="/artisan/logistics"
+                              className="inline-flex items-center justify-center bg-google-blue text-white text-xs font-medium px-3 py-1.5 rounded-md hover:bg-opacity-90 transition-colors shadow-sm"
                             >
-                              {statusOptions.map((status) => (
-                                <option key={status} value={status}>
-                                  {status.charAt(0).toUpperCase() +
-                                    status.slice(1)}
-                                </option>
-                              ))}
-                            </select>
+                              Prepare Shipment
+                            </Link>
                           </td>
                         </tr>
                       ))}
@@ -414,7 +337,6 @@ const MyOrdersPage = () => {
         </AnimatedSection>
       </div>
 
-      {}
       <aside className="lg:w-80 flex-shrink-0 space-y-6 lg:sticky lg:top-24 self-start mt-4 lg:mt-0">
         <AnimatedSection>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200">
@@ -424,7 +346,6 @@ const MyOrdersPage = () => {
                 Completed Orders
               </h3>
             </div>
-            {}
             <div className="divide-y divide-gray-100 max-h-[60vh] overflow-y-auto">
               {completedOrders.length > 0 ? (
                 completedOrders.map((order) => (
@@ -442,10 +363,9 @@ const MyOrdersPage = () => {
                         </p>
                       </div>
                       <span
-                        className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                          statusColors[getOrderStatus(order)] ||
+                        className={`text-xs font-semibold px-2 py-0.5 rounded-full ${statusColors[getOrderStatus(order)] ||
                           "bg-gray-100 text-gray-800"
-                        }`}
+                          }`}
                       >
                         {getOrderStatus(order).charAt(0).toUpperCase() +
                           getOrderStatus(order).slice(1)}
@@ -456,7 +376,7 @@ const MyOrdersPage = () => {
                         {formatDate(order.createdAt)}
                       </p>
                       <p className="text-sm font-medium text-gray-700">
-                        ${order.pricing?.total?.toFixed(2) || "0.00"}
+                        ₹{order.pricing?.total?.toFixed(2) || "0.00"}
                       </p>
                     </div>
                   </div>
@@ -467,7 +387,6 @@ const MyOrdersPage = () => {
                 </p>
               )}
             </div>
-            {}
             {completedOrders.length > 3 && (
               <div className="p-3 text-center bg-gray-50/70 rounded-b-xl border-t border-gray-100">
                 <Link

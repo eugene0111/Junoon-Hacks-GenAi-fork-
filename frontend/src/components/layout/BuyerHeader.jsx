@@ -3,7 +3,8 @@ import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, User, Bell, Search, X, ArrowLeft } from "lucide-react";
+import { LogOut, User, Bell, Search, X, ArrowLeft, Menu } from "lucide-react";
+import { useMobileSidebar } from "../../context/MobileSidebarContext";
 
 const CartIcon = () => {
   const { cartCount } = useCart();
@@ -57,6 +58,7 @@ const simpleFade = {
 
 const BuyerHeader = () => {
   const { user, logout, notifications, markNotificationAsRead } = useAuth();
+  const { openSidebar } = useMobileSidebar();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -249,6 +251,12 @@ const BuyerHeader = () => {
         <div className="h-full flex items-center justify-between space-x-4 relative">
           {}
           <div className="flex items-center justify-start h-full flex-shrink-0">
+            <button
+            onClick={openSidebar}
+            className="p-2 rounded-full hover:bg-gray-100 mr-2 md:hidden"
+          >
+            <Menu className="w-6 h-6 text-gray-700" />
+          </button>
             <AnimatePresence initial={false} mode="wait">
               {isSearchActive ? (
                 <motion.button

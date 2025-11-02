@@ -204,7 +204,7 @@ const InvestmentCard = ({ investment }) => {
       <div className="flex items-center gap-4 flex-shrink-0">
         <div className="text-right hidden sm:block">
           <p className="font-medium text-sm text-gray-800">
-            ${investment.amount.toLocaleString()}
+            ₹{investment.amount.toLocaleString()}
           </p>
           <p className="text-xs text-gray-500">Invested</p>
         </div>
@@ -484,7 +484,7 @@ const InvestmentPortfolio = () => {
               </h3>
             </div>
             <p className="text-4xl font-bold text-gray-800">
-              ${summary.totalInvested.toLocaleString()}
+              ₹{summary.totalInvested.toLocaleString()}
             </p>
           </div>
         </AnimatedSection>

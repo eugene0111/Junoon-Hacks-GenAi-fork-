@@ -89,5 +89,5 @@ html.translated-rtl .main-app-header {
 html.translated-ltr .main-page-content,
 html.translated-rtl .main-page-content {
   /
-  padding-top: calc(4rem + 40px);
+  padding-top:calc(4rem + 40px);
 }

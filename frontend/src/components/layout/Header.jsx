@@ -1,13 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useMobileSidebar } from "../../context/MobileSidebarContext";
+import { Menu } from "lucide-react";
 
 const Header = ({ onLoginClick }) => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { openSidebar } = useMobileSidebar();
 
   return (
     <header className="main-app-header fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 shadow-md">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <button
+            onClick={openSidebar}
+            className="p-2 rounded-full hover:bg-gray-100 mr-2 md:hidden"
+          >
+            <Menu className="w-6 h-6 text-gray-700" />
+          </button>
         <Link to="/" className="flex items-center space-x-3">
           <img
             src="/logo.png"
@@ -15,7 +24,7 @@ const Header = ({ onLoginClick }) => {
             className="h-10 w-10 object-contain"
           />
           <h1 className="text-3xl font-bold text-gray-800 tracking-tighter">
-            Kala<span className="text-google-blue">Ghar</span>
+            कला<span className="text-google-blue">Ghar</span>
           </h1>
         </Link>
 

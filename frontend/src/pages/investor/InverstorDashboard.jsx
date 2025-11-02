@@ -177,7 +177,7 @@ const InvestorDashboard = () => {
   const statsData = [
     {
       title: "Total Invested",
-      value: `$${
+      value: `₹${
         typeof stats?.totalInvested === "number"
           ? stats.totalInvested.toLocaleString()
           : 0

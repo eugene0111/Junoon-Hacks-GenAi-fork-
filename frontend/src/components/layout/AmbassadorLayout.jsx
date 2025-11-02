@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { LogOut, User, Bell } from "lucide-react";
+import { LogOut, User, Bell ,Menu} from "lucide-react";
+import { useMobileSidebar } from "../../context/MobileSidebarContext";
 
 const NavItem = ({ to, children }) => (
   <NavLink
@@ -22,6 +23,7 @@ const NavItem = ({ to, children }) => (
 const AmbassadorHeader = () => {
   const { user, logout, notifications, markNotificationAsRead } = useAuth();
   const navigate = useNavigate();
+  const { openSidebar } = useMobileSidebar();
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -59,6 +61,12 @@ const AmbassadorHeader = () => {
       <div className="w-full">
         <div className="h-16 flex items-center justify-between px-4 sm:px-6 md:px-8">
           <div className="flex items-center h-16">
+            <button
+            onClick={openSidebar}
+            className="p-2 rounded-full hover:bg-gray-100 mr-2 md:hidden"
+          >
+            <Menu className="w-6 h-6 text-gray-700" />
+          </button>
             <Link
               to="/ambassador/dashboard"
               className="flex items-center space-x-3 mr-8 flex-shrink-0"

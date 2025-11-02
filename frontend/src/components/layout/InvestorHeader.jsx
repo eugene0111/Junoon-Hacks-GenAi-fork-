@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { LogOut, User, Bell } from "lucide-react";
+import { LogOut, User, Bell ,Menu} from "lucide-react";
+import { useMobileSidebar } from "../../context/MobileSidebarContext";
 
 const NavItem = ({ to, children }) => (
   <NavLink
@@ -21,6 +22,7 @@ const NavItem = ({ to, children }) => (
 
 const InvestorHeader = () => {
   const { user, logout, notifications, markNotificationAsRead } = useAuth();
+  const { openSidebar } = useMobileSidebar();
   const navigate = useNavigate();
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -59,6 +61,12 @@ const InvestorHeader = () => {
     <header className="main-app-header fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-sm z-50 shadow-sm border-b border-gray-200">
       <div className="w-full">
         <div className="h-16 flex items-center justify-between px-4 sm:px-6 md:px-8">
+          <button
+            onClick={openSidebar}
+            className="p-2 rounded-full hover:bg-gray-100 mr-2 md:hidden"
+          >
+            <Menu className="w-6 h-6 text-gray-700" />
+          </button>
           <div className="flex items-center h-16">
             <NavLink
               to="/investor/dashboard"
